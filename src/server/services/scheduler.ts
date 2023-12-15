@@ -1,8 +1,7 @@
 import { OnStart, Service } from "@flamework/core";
 import { Players } from "@rbxts/services";
 import { Modding } from "@flamework/core";
-
-print("scheduler loaded")
+import { onGameStart } from "server/game/events";
 
 export interface OnPlayerJoined {
     onPlayerJoined(player: Player): void;
@@ -11,12 +10,8 @@ export interface OnPlayerJoined {
 @Service()
 export class PlayerJoinService implements OnStart {
     onStart() {
-        print("called on start!")
         const listeners = new Set<OnPlayerJoined>();
 
-        // Automatically updates the listeners set whenever a listener is added or removed.
-        // You can do more than just keeping track of a set,
-        // e.g fire the new listener's event for all existing players.
         Modding.onListenerAdded<OnPlayerJoined>((object) => listeners.add(object));
         Modding.onListenerRemoved<OnPlayerJoined>((object) => listeners.delete(object));
 
@@ -31,5 +26,25 @@ export class PlayerJoinService implements OnStart {
                 task.spawn(() => listener.onPlayerJoined(player));
             }
         }
+    }
+}
+
+export interface OnGameStarted {
+    onGameStarted(): void;
+}
+
+@Service()
+export class GameStartService implements OnStart {
+    onStart() {
+        const listeners = new Set<OnGameStarted>();
+
+        Modding.onListenerAdded<OnGameStarted>((object) => listeners.add(object));
+        Modding.onListenerRemoved<OnGameStarted>((object) => listeners.delete(object));
+
+        onGameStart.Connect(() => {
+            for (const listener of listeners) {
+                task.spawn(() => listener.onGameStarted());
+            }
+        });
     }
 }

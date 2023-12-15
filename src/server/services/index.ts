@@ -1,11 +1,14 @@
 import { Service } from "@flamework/core";
-import { OnPlayerJoined } from "server/services/scheduler";
+import { Events } from "server/network";
+import { OnGameStarted, OnPlayerJoined } from "server/services/scheduler";
 
-print("index loaded")
+Events.event.connect((message) => {
+    print(`Event received, ${message}`);
+});
 
 @Service()
-export class PlayerJoinListener implements OnPlayerJoined {
-    onPlayerJoined(player: Player) {
-        print(`Player ${player.Name} joined (scheduler works)!`);
+export class GameStartListener implements OnGameStarted {
+    onGameStarted() {
+        print("Game started (THIS IS GOOD)!");
     }
 }
