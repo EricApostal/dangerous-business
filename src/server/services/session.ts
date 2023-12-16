@@ -14,8 +14,19 @@ class PlayerData {
         return this._items;
     }
 
-    addItem(item: Item) {
+    addItem(item: Item): boolean {
+        if (!item.pockitable) {
+
+            // Ensure we aren't already holding a non-pocketable item 
+            for (let itm of this._items) {
+                if (!itm.pockitable) {
+                    return false;
+                }
+            }
+        }
+
         this._items.push(item);
+        return true;
     }
 
     removeItem(item: Item) {

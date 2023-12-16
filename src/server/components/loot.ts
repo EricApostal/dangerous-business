@@ -17,13 +17,22 @@ export class Loot extends BaseComponent implements OnStart {
     onStart(): void {
         print("Attached loot to " + this.instance.Name);
         if (this.instance.IsA("BasePart")) {
-            let prompt = this.instance.FindFirstChild("ProximityPrompt") as ProximityPrompt;
+            let prompt: ProximityPrompt = new Instance("ProximityPrompt");
+
+            prompt.Parent = this.instance;
+            prompt.ActionText = `Pick Up`;
+            prompt.MaxActivationDistance = 8;
+            prompt.HoldDuration = 0.5;
+            prompt.ObjectText = ItemRegistry.getItem(this.instance.Name)?.displayName as string;
+            prompt.Enabled = true;
+
             prompt.Triggered.Connect((player) => {
-                Functions.pickupItem.invoke(player, this.instance.Name);
-                SessionManager.getSession(player)!.addItem(ItemRegistry.getItem(this.instance.Name.lower()) as Item);
-                print(`new items: ${SessionManager.getSession(player)!.getItems().size()}`)
-                print(SessionManager.getSession(player)!.getItems());
-                this.instance.Destroy();
+                if (SessionManager.getSession(player)!.addItem(ItemRegistry.getItem(this.instance.Name.lower()) as Item)) {
+                    Functions.pickupItem.invoke(player, this.instance.Name);
+                    print(`new items: ${SessionManager.getSession(player)!.getItems().size()}`)
+                    print(SessionManager.getSession(player)!.getItems());
+                    this.instance.Destroy();
+                }
             });
         }
     }

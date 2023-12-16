@@ -4,8 +4,8 @@ import { useState, withHooks } from "@rbxts/roact-hooked";
 const LocalPlayer = game.GetService("Players").LocalPlayer as Player;
 const PlayerGui = LocalPlayer.FindFirstChildOfClass("PlayerGui");
 
-export function spawnLeftBar() {
-    const LeftBar = withHooks(() => {
+export function spawnInventory() {
+    const Inventory = withHooks(() => {
         const [buttonText, setButtonText] = useState("Hello, World!");
 
         const onButtonClick = (rbx: GuiButton, x: number, y: number) => {
@@ -27,6 +27,6 @@ export function spawnLeftBar() {
         );
     });
 
-    const bar = <LeftBar />;
+    const bar = <Inventory />;
     Roact.mount(bar, PlayerGui, "HelloWorld");
 }

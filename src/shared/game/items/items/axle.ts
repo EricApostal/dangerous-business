@@ -2,6 +2,6 @@ import { Item } from "../item";
 
 export class Axle extends Item {
     constructor() {
-        super("Axle", 50, 10);
+        super("axle", "Axle", 50, 10, false);
     }
 }
