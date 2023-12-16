@@ -4,7 +4,7 @@ import { OnGameStarted } from "server/services/scheduler";
 import { onGameStart } from "server/game/events";
 
 @Component({
-    tag: "ship_door"
+    tag: "left_sliding_door"
 })
 export class SlidingDoor extends BaseComponent implements OnStart {
     constructor() {
@@ -12,20 +12,36 @@ export class SlidingDoor extends BaseComponent implements OnStart {
     }
 
     onStart() {
-        // print(this.instance.GetFullName());
-        print(`Attached to ${this.instance.GetFullName()}`);
         onGameStart.Connect(() => {
-
-            // Do tween to open ship door on game start 
             if (this.instance.IsA("BasePart")) {
                 const tween = game.GetService("TweenService");
-                const tweenInfo = new TweenInfo(9, Enum.EasingStyle.Linear, Enum.EasingDirection.Out);
+                const tweenInfo = new TweenInfo(0.5, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out);
                 const pos = this.instance.Position;
-                const tweenDoor = tween.Create(this.instance, tweenInfo, { Position: new Vector3(pos.X, pos.Y - 11, pos.Z) });
+                const tweenDoor = tween.Create(this.instance, tweenInfo, { Position: new Vector3(pos.X, pos.Y, pos.Z + 7) });
                 tweenDoor.Play();
             }
         });
+    }
+}
 
+@Component({
+    tag: "right_sliding_door"
+})
+export class RightSlidingDoor extends BaseComponent implements OnStart {
+    constructor() {
+        super();
     }
 
+    onStart() {
+        onGameStart.Connect(() => {
+            // Do tween to open ship door on game start 
+            if (this.instance.IsA("BasePart")) {
+                const tween = game.GetService("TweenService");
+                const tweenInfo = new TweenInfo(0.5, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out);
+                const pos = this.instance.Position;
+                const tweenDoor = tween.Create(this.instance, tweenInfo, { Position: new Vector3(pos.X, pos.Y, pos.Z - 7) });
+                tweenDoor.Play();
+            }
+        });
+    }
 }

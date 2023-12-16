@@ -4,7 +4,6 @@ import { Modding } from "@flamework/core";
 import { onGameStart } from "server/game/events";
 import { BaseComponent } from "@flamework/components";
 
-
 export interface OnPlayerJoined {
     onPlayerJoined(player: Player): void;
 }
