@@ -39,29 +39,35 @@ class PlayerData {
     }
 }
 
-@Service()
-export class Session {
-    private _sessions: Map<Player, PlayerData> = new Map();
+export namespace SessionManager {
+    let _sessions: Map<Player, PlayerData> = new Map();
 
-    constructor() {
+    export function init() {
         Players.PlayerAdded.Connect((player) => {
-            this.createSession(player);
+            createSession(player);
         });
 
         Players.PlayerRemoving.Connect((player) => {
-            this.destroySession(player);
+            destroySession(player);
         });
     }
 
-    getSession(player: Player) {
-        return this._sessions.get(player);
+    export function getSession(player: Player) {
+        return _sessions.get(player);
     }
 
-    createSession(player: Player) {
-        this._sessions.set(player, new PlayerData());
+    export function createSession(player: Player) {
+        _sessions.set(player, new PlayerData());
     }
 
-    destroySession(player: Player) {
-        this._sessions.delete(player);
+    export function destroySession(player: Player) {
+        _sessions.delete(player);
+    }
+}
+
+@Service()
+class SessionService {
+    constructor() {
+        SessionManager.init();
     }
 }

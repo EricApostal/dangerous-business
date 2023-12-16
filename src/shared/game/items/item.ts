@@ -1,4 +1,4 @@
-export class Item {
+export abstract class Item {
     name: String;
     value: Number;
     rarity: Number;
