@@ -2,17 +2,19 @@ export class Item {
     name: String;
     value: Number;
     rarity: Number;
-    model: Model;
 
-    constructor(name: String, value: Number, rarity: Number, model: Model) {
+    constructor(name: String, value: Number, rarity: Number) {
         this.name = name;
         this.value = value;
         this.rarity = rarity;
-        this.model = model;
     }
 
     equip() { }
     unequip() { }
-    pickup() { }
+    pickup() {
+        print("Picked up item " + this.name);
+    }
     drop() { }
 }
+
+export type ItemBase = Item;

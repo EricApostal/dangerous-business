@@ -9,6 +9,6 @@ Events.event.connect((message) => {
 @Service()
 export class GameStartListener implements OnGameStarted {
     onGameStarted() {
-        print("Game started (THIS IS GOOD)!");
+        print("Game started!");
     }
 }
