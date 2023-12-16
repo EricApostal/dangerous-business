@@ -2,13 +2,15 @@ import { OnStart, Service } from "@flamework/core";
 import { Players } from "@rbxts/services";
 import { Modding } from "@flamework/core";
 import { onGameStart } from "server/game/events";
+import { BaseComponent } from "@flamework/components";
+
 
 export interface OnPlayerJoined {
     onPlayerJoined(player: Player): void;
 }
 
 @Service()
-export class PlayerJoinService implements OnStart {
+export class PlayerJoinService extends BaseComponent implements OnStart {
     onStart() {
         const listeners = new Set<OnPlayerJoined>();
 
@@ -34,7 +36,11 @@ export interface OnGameStarted {
 }
 
 @Service()
-export class GameStartService implements OnStart {
+export class GameStartService extends BaseComponent implements OnStart {
+    constructor() {
+        super();
+    }
+
     onStart() {
         const listeners = new Set<OnGameStarted>();
 
