@@ -8,6 +8,7 @@ import { TweenService } from "@rbxts/services";
     tag: "mob"
 })
 export class Mob extends BaseComponent implements OnStart {
+    pathfindFollowThread: thread | undefined;
     constructor() {
         super();
     }
@@ -43,17 +44,38 @@ export class Mob extends BaseComponent implements OnStart {
         }
 
         return waypoints;
+    }
 
+
+    startWaypointTask() {
+        if (typeIs(this.pathfindFollowThread, "thread")) {
+            task.cancel(this.pathfindFollowThread);
+        }
+
+        this.pathfindFollowThread = task.spawn(() => {
+            let path = this.getWaypoints();
+            path.remove(0);
+            path.remove(0);
+
+            let timePerNode = 0.2;
+            for (const waypoint of path) {
+                let newCFrame = waypoint.Position.add(new Vector3(0, 1 + (this.instance as BasePart).Size.Y / 2, 0));
+                TweenService.Create((this.instance as BasePart), new TweenInfo(timePerNode), { Position: newCFrame }).Play();
+                (this.instance as BasePart).CFrame = CFrame.lookAt((this.instance as BasePart).Position, new Vector3(waypoint.Position.X, (this.instance as BasePart).Position.Y, waypoint.Position.Z));
+
+                task.wait(timePerNode - 0.05);
+            }
+        });
     }
 
     onStart() {
-        let path = this.getWaypoints();
-        let timePerNode = 0.2;
-        for (const waypoint of path) {
-            let newCFrame = new CFrame(waypoint.Position.add(new Vector3(0, (this.instance as BasePart).Size.Y / 2, 0)));
-            // tween to newCFrame
-            TweenService.Create((this.instance as BasePart), new TweenInfo(timePerNode), { CFrame: newCFrame }).Play();
-            task.wait(timePerNode - 0.1);
-        }
+        task.wait(5);
+        // this.startWaypointTask();
+        task.spawn(() => {
+            while (true) {
+                task.wait(0.5);
+                this.startWaypointTask();
+            }
+        });
     }
 }
