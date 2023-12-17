@@ -10,7 +10,6 @@ export namespace ItemRegistry {
     export let axle: Axle = new Axle();
 
     export function getItem(name: string): Item | undefined {
-        print(`getting item ${name}`)
         return _items.get(name)
     }
 }

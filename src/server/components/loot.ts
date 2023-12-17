@@ -30,7 +30,7 @@ export class Loot extends BaseComponent implements OnStart {
                 let newItem = ItemRegistry.getItem(this.instance.Name.lower()) as Item;
 
                 if (SessionManager.getSession(player)!.addItem(newItem)) {
-                    Functions.pickupItem.invoke(player, this.instance.Name);
+                    Functions.pickupItem.invoke(player, this.instance.Name, newItem.id);
                     print(`new items: ${SessionManager.getSession(player)!.getItems().size()}`)
                     print(SessionManager.getSession(player)!.getItems());
 

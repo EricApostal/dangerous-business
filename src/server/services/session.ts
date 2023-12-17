@@ -33,6 +33,10 @@ class PlayerData {
         this._items.find((curr) => curr === item);
     }
 
+    removeItemById(id: string) {
+        this._items.remove(this._items.indexOf(this._items.find((curr) => curr.id === id) as Item));
+    }
+
     getPoints() {
         return this._points;
     }
