@@ -41,7 +41,6 @@ class PlayerData {
     }
 
     removeItemById(id: string) {
-        print(`removing item ${id}`)
         this._items.remove(this._items.indexOf(this._items.find((curr) => curr.id === id) as Item));
     }
 

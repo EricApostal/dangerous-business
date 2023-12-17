@@ -4,9 +4,7 @@ import { Players } from "@rbxts/services";
 @Controller({})
 export class MouseController {
     constructor() {
-        print("Mouse controller loaded")
         let mouse = Players.LocalPlayer.GetMouse();
         mouse.Icon = "rbxassetid://15659220875";
-
     }
 }

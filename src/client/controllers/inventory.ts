@@ -27,7 +27,13 @@ export class InventoryController {
     private initBinds() {
         Functions.pickupItem.setCallback(async (item: string) => {
             let itemObj: Item = ItemRegistry.getItem(item) as Item;
-            print(`Picked up item ${item}`);
+
+            if (this.inventory.size() === 0) {
+                this.selected = 0;
+                updateSelected(this.selected);
+            }
+
+            // game.GetService("VoiceChatInternal").
 
             if (!itemObj.pockitable) {
                 let localClone = itemObj.model.Clone();
@@ -48,16 +54,15 @@ export class InventoryController {
 
         Functions.dropItem.setCallback(async (id: string) => {
             this.inventory = await Functions.getItems.invoke();
+            if (this.selected > this.inventory.size() - 1) {
+                this.selected = this.inventory.size() - 1;
+                updateSelected(this.selected);
+            }
             game.Workspace.FindFirstChild("largeitem_visualclone")?.Destroy();
-
-            print("items: ");
-            print(this.inventory);
         });
 
         game.GetService("UserInputService").InputBegan.Connect((input, gameProcessed) => {
             if (input.KeyCode === Enum.KeyCode.Q) {
-                print("Inventory: ");
-                print(this.inventory);
                 for (let item of this.inventory) {
                     if (!item.pockitable) {
                         Functions.dropItem.invoke(item.id);
@@ -78,7 +83,6 @@ export class InventoryController {
                 _absoluteScroll += delta;
                 this.selected = _absoluteScroll % this.inventory.size();
 
-                print(this.selected)
                 updateSelected(this.selected);
             }
         });

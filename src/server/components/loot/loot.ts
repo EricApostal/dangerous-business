@@ -33,8 +33,6 @@ export class Loot extends BaseComponent implements OnStart {
 
                 if (SessionManager.getSession(player)!.addItem(newItem)) {
                     Functions.pickupItem.invoke(player, this.instance.Name, newItem.id);
-                    print(`new items: ${SessionManager.getSession(player)!.getItems().size()}`)
-                    print(SessionManager.getSession(player)!.getItems());
 
                     if (newItem.pockitable) { this.instance.Destroy(); } else {
                         let leftHand = player.Character?.FindFirstChild("LeftHand") as BasePart;

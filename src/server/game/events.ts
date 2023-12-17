@@ -5,7 +5,7 @@ export const onGameStart = new Signal();
 // On server start
 export function init() {
     print("Initializing server...");
-    wait(5);
+    wait(3);
     start();
 }
 

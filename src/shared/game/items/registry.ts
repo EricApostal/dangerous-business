@@ -14,4 +14,8 @@ export namespace ItemRegistry {
     export function getItem(name: string): Item | undefined {
         return _items.get(name)
     }
+
+    export function getItems(): Map<string, Item> {
+        return _items;
+    }
 }
