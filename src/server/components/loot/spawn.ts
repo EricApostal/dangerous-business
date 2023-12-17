@@ -34,7 +34,10 @@ export class SpawnPad extends BaseComponent implements OnStart {
                 let chance = 100 - item[1].rarity;
                 if (math.random(1, 100) <= chance) {
                     toSpawn = item[1];
-                    print(toSpawn.displayName)
+                    let model = toSpawn.model.Clone();
+                    model.CFrame = (this.instance as BasePart).CFrame.add(new Vector3(0, 1, 0));
+                    model.Anchored = true;
+                    model.Parent = game.Workspace;
                     break;
                 }
             }
