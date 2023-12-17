@@ -16,43 +16,41 @@ export class Loot extends BaseComponent implements OnStart {
     }
 
     onStart(): void {
-        if (this.instance.IsA("BasePart")) {
+        this.instance = this.instance as BasePart;
 
-            function mountProximityPrompt() { }
-            let prompt: ProximityPrompt = new Instance("ProximityPrompt");
+        let prompt: ProximityPrompt = new Instance("ProximityPrompt");
 
-            prompt.Parent = this.instance;
-            prompt.ActionText = `Pick Up`;
-            prompt.MaxActivationDistance = 8;
-            prompt.HoldDuration = 0.5;
-            prompt.ObjectText = ItemRegistry.getItem(this.instance.Name)?.displayName as string;
-            prompt.Enabled = true;
+        prompt.Parent = this.instance;
+        prompt.ActionText = `Pick Up`;
+        prompt.MaxActivationDistance = 8;
+        prompt.HoldDuration = 0.5;
+        prompt.ObjectText = ItemRegistry.getItem(this.instance.Name)?.displayName as string;
+        prompt.Enabled = true;
 
-            prompt.Triggered.Connect((player) => {
-                let newItem = ItemRegistry.getItem(this.instance.Name.lower()) as Item;
+        prompt.Triggered.Connect((player) => {
+            let newItem = ItemRegistry.getItem(this.instance.Name.lower()) as Item;
 
-                if (SessionManager.getSession(player)!.addItem(newItem)) {
-                    Functions.pickupItem.invoke(player, this.instance.Name, newItem.id);
+            if (SessionManager.getSession(player)!.addItem(newItem)) {
+                Functions.pickupItem.invoke(player, this.instance.Name, newItem.id);
 
-                    if (newItem.pockitable) { this.instance.Destroy(); } else {
-                        let leftHand = player.Character?.FindFirstChild("LeftHand") as BasePart;
-                        this.instance.Parent = leftHand;
-                        (this.instance as BasePart).CFrame = leftHand.CFrame;
-                        this.instance.FindFirstChild("ProximityPrompt")?.Destroy();
-                        let weld = new Instance("WeldConstraint");
-                        weld.Parent = this.instance;
-                        (this.instance as BasePart).Anchored = false;
-                        weld.Part0 = this.instance as BasePart;
-                        weld.Part1 = leftHand;
+                if (newItem.pockitable) { this.instance.Destroy(); } else {
+                    let leftHand = player.Character?.FindFirstChild("LeftHand") as BasePart;
+                    this.instance.Parent = leftHand;
+                    (this.instance as BasePart).CFrame = leftHand.CFrame;
+                    this.instance.FindFirstChild("ProximityPrompt")?.Destroy();
+                    let weld = new Instance("WeldConstraint");
+                    weld.Parent = this.instance;
+                    (this.instance as BasePart).Anchored = false;
+                    weld.Part0 = this.instance as BasePart;
+                    weld.Part1 = leftHand;
 
-                        onItemDropped.Connect((dropper, item) => {
-                            if (item.id === newItem.id) {
-                                this.instance.Destroy();
-                            }
-                        });
-                    }
+                    onItemDropped.Connect((dropper, item) => {
+                        if (item.id === newItem.id) {
+                            this.instance.Destroy();
+                        }
+                    });
                 }
-            });
-        }
+            }
+        });
     }
 }
