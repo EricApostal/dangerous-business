@@ -15,6 +15,9 @@ class PlayerData {
     }
 
     addItem(item: Item): boolean {
+        if ((this._items.size() >= 4) && item.pockitable) {
+            return false;
+        }
         if (!item.pockitable) {
 
             // Ensure we aren't already holding a non-pocketable item 
@@ -38,6 +41,7 @@ class PlayerData {
     }
 
     removeItemById(id: string) {
+        print(`removing item ${id}`)
         this._items.remove(this._items.indexOf(this._items.find((curr) => curr.id === id) as Item));
     }
 
