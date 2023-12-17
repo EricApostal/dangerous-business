@@ -43,10 +43,18 @@ export class InventoryController {
         return count;
     }
 
+    private getItemByID(id: string): Item | undefined {
+        for (let item of this.inventory) {
+            if (item.id === id) {
+                return item;
+            }
+        }
+        return undefined;
+    }
+
     private initBinds() {
         Functions.pickupItem.setCallback(async (item: string) => {
             let itemObj: Item = ItemRegistry.getItem(item) as Item;
-            let mod
 
             if (this.getHotbarItemCount() === 0) {
                 this.selected = 0;
@@ -71,6 +79,7 @@ export class InventoryController {
         });
 
         Functions.dropItem.setCallback(async (id: string) => {
+
             this.inventory = await Functions.getItems.invoke();
             if (this.selected > this.getHotbarItemCount() - 1) {
                 this.selected = this.getHotbarItemCount() - 1;

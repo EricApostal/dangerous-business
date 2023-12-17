@@ -8,6 +8,10 @@ export const toggleDoors = new Signal();
 
 let opened = false;
 
+let sound = new Instance("Sound");
+sound.SoundId = "rbxassetid://8109376048";
+sound.RollOffMinDistance = 50;
+
 onGameStart.Connect(() => {
     toggleDoors.Fire();
 });
@@ -20,8 +24,14 @@ export class SlidingDoor extends BaseComponent implements OnStart {
         super();
     }
 
+    private playSound() {
+        sound.Parent = this.instance;
+        sound.Play();
+    }
+
     onStart() {
         toggleDoors.Connect(() => {
+            this.playSound();
             let modifier = 7;
             if (opened) {
                 modifier = -7;
@@ -45,8 +55,14 @@ export class RightSlidingDoor extends BaseComponent implements OnStart {
         super();
     }
 
+    private playSound() {
+        sound.Parent = this.instance;
+        sound.Play();
+    }
+
     onStart() {
         toggleDoors.Connect(() => {
+            this.playSound();
             let modifier = 7;
             if (opened) {
                 modifier = -7;
@@ -75,13 +91,19 @@ export class ShipDoorOpener extends BaseComponent implements OnStart {
     onStart() {
         onGameStart.Connect(() => {
             // Do tween to open ship door on game start 
+
+
+
             if (this.instance.IsA("BasePart")) {
                 (this.instance.FindFirstChild("ProximityPrompt") as ProximityPrompt).Triggered.Connect(() => {
                     toggleDoors.Fire();
                     opened = !opened;
-                    let text = "Open";
+
+                    let text = "";
                     if (opened) {
                         text = "Close";
+                    } else {
+                        text = "Open";
                     }
                     (this.instance.FindFirstChild("ProximityPrompt") as ProximityPrompt).ActionText = text;
                 })

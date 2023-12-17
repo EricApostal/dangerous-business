@@ -3,17 +3,22 @@ export abstract class Item {
     displayName: string;
     value: number;
     rarity: number;
-    pockitable: boolean = true;
     model: BasePart;
+    pickupSound: Sound;
+    dropSound: Sound;
     id: string;
 
-    constructor(name: string, displayName: string, value: number, rarity: number, model: BasePart, pocketable: boolean = true) {
+    pockitable: boolean = true;
+
+    constructor(name: string, displayName: string, value: number, rarity: number, model: BasePart, pickupSound: Sound, dropSound: Sound, pocketable: boolean = true) {
         this.name = name;
         this.value = value;
         this.rarity = rarity;
         this.pockitable = pocketable;
         this.displayName = displayName;
         this.model = model;
+        this.pickupSound = pickupSound;
+        this.dropSound = dropSound;
         this.id = game.GetService("HttpService").GenerateGUID(false);
     }
 

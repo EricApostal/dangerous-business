@@ -30,6 +30,18 @@ export class Loot extends BaseComponent implements OnStart {
         prompt.Triggered.Connect((player) => {
             let newItem = ItemRegistry.getItem(this.instance.Name.lower()) as Item;
 
+            let sound = newItem!.pickupSound.Clone()
+            sound.Parent = player.Character?.FindFirstChild("HumanoidRootPart") as BasePart;
+            sound.Play();
+
+            onItemDropped.Connect((dropper, item) => {
+                if (item.id === newItem.id) {
+                    let sound = newItem!.dropSound.Clone()
+                    sound.Parent = player.Character?.FindFirstChild("HumanoidRootPart") as BasePart;;
+                    sound.Play();
+                }
+            });
+
             if (SessionManager.getSession(player)!.addItem(newItem)) {
                 Functions.pickupItem.invoke(player, this.instance.Name, newItem.id);
 
@@ -46,6 +58,9 @@ export class Loot extends BaseComponent implements OnStart {
 
                     onItemDropped.Connect((dropper, item) => {
                         if (item.id === newItem.id) {
+                            let sound = newItem!.dropSound.Clone()
+                            sound.Parent = player.Character?.FindFirstChild("HumanoidRootPart") as BasePart;;
+                            sound.Play();
                             this.instance.Destroy();
                         }
                     });
