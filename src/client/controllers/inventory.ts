@@ -32,6 +32,7 @@ Functions.pickupItem.setCallback(async (item: string) => {
             let camera = game.Workspace.CurrentCamera as Camera;
             let newPos = new Vector3(rootPart.Position.X + camera.CFrame.LookVector.X * offset, rootPart.Position.Y + camera.CFrame.LookVector.Y * offset, rootPart.Position.Z + camera.CFrame.LookVector.Z * offset);
             localClone.CFrame = new CFrame(newPos, newPos.add(rootPart.CFrame.LookVector).add(camera.CFrame.LookVector.div(6)));
+            localClone.Name = "largeitem_visualclone";
         });
     }
 
@@ -41,6 +42,8 @@ Functions.pickupItem.setCallback(async (item: string) => {
 
 Functions.dropItem.setCallback(async (id: string) => {
     inventory = await Functions.getItems.invoke();
+    game.Workspace.FindFirstChild("largeitem_visualclone")?.Destroy();
+
     print("items: ");
     print(inventory);
 });

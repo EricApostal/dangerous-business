@@ -2,6 +2,7 @@ import { Component, BaseComponent } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { onGameStart } from "server/game/events";
 import { Functions } from "server/network";
+import { onItemDropped } from "server/services/inventory";
 import { SessionManager } from "server/services/session";
 import { Item } from "shared/game/items/item";
 import { ItemRegistry } from "shared/game/items/registry";
@@ -15,8 +16,9 @@ export class Loot extends BaseComponent implements OnStart {
     }
 
     onStart(): void {
-        print("Attached loot to " + this.instance.Name);
         if (this.instance.IsA("BasePart")) {
+
+            function mountProximityPrompt() { }
             let prompt: ProximityPrompt = new Instance("ProximityPrompt");
 
             prompt.Parent = this.instance;
@@ -44,6 +46,12 @@ export class Loot extends BaseComponent implements OnStart {
                         (this.instance as BasePart).Anchored = false;
                         weld.Part0 = this.instance as BasePart;
                         weld.Part1 = leftHand;
+
+                        onItemDropped.Connect((dropper, item) => {
+                            if (item.id === newItem.id) {
+                                this.instance.Destroy();
+                            }
+                        });
                     }
                 }
             });

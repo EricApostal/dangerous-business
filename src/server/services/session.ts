@@ -29,6 +29,10 @@ class PlayerData {
         return true;
     }
 
+    getItemById(id: string) {
+        return this._items.find((curr) => curr.id === id);
+    }
+
     removeItem(item: Item) {
         this._items.find((curr) => curr === item);
     }
@@ -36,6 +40,7 @@ class PlayerData {
     removeItemById(id: string) {
         this._items.remove(this._items.indexOf(this._items.find((curr) => curr.id === id) as Item));
     }
+
 
     getPoints() {
         return this._points;
