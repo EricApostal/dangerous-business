@@ -2,6 +2,7 @@ import { BaseComponent, Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { PathfindingService } from "@rbxts/services";
 import { Players } from "@rbxts/services";
+import { TweenService } from "@rbxts/services";
 
 @Component({
     tag: "mob"
@@ -47,10 +48,12 @@ export class Mob extends BaseComponent implements OnStart {
 
     onStart() {
         let path = this.getWaypoints();
-        print(path)
+        let timePerNode = 0.2;
         for (const waypoint of path) {
-            (this.instance as BasePart).CFrame = new CFrame(waypoint.Position.add(new Vector3(0, (this.instance as BasePart).Size.Y / 2, 0)));
-            task.wait(0.2)
+            let newCFrame = new CFrame(waypoint.Position.add(new Vector3(0, (this.instance as BasePart).Size.Y / 2, 0)));
+            // tween to newCFrame
+            TweenService.Create((this.instance as BasePart), new TweenInfo(timePerNode), { CFrame: newCFrame }).Play();
+            task.wait(timePerNode - 0.1);
         }
     }
 }
