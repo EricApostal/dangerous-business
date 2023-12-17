@@ -4,21 +4,21 @@ export abstract class Item {
     value: Number;
     rarity: Number;
     pockitable: Boolean = true;
+    model: BasePart;
 
-    constructor(name: String, displayName: String, value: Number, rarity: Number, pocketable: Boolean = true) {
+    constructor(name: String, displayName: String, value: Number, rarity: Number, model: BasePart, pocketable: Boolean = true) {
         this.name = name;
         this.value = value;
         this.rarity = rarity;
         this.pockitable = pocketable;
         this.displayName = displayName;
+        this.model = model;
     }
 
-    equip() { }
-    unequip() { }
-    pickup() {
-        print("Picked up item " + this.name);
-    }
-    drop() { }
+    onEquip() { }
+    onUnequip() { }
+    onPickup() { }
+    onDrop() { }
 }
 
 export type ItemBase = Item;

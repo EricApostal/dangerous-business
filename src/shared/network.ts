@@ -3,6 +3,7 @@ import { Item, ItemBase } from "./game/items/item";
 
 interface ClientToServerEvents {
     event(param1: string): void;
+    getItems(): void;
 }
 
 interface ServerToClientEvents {

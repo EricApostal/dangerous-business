@@ -27,11 +27,24 @@ export class Loot extends BaseComponent implements OnStart {
             prompt.Enabled = true;
 
             prompt.Triggered.Connect((player) => {
-                if (SessionManager.getSession(player)!.addItem(ItemRegistry.getItem(this.instance.Name.lower()) as Item)) {
+                let newItem = ItemRegistry.getItem(this.instance.Name.lower()) as Item;
+
+                if (SessionManager.getSession(player)!.addItem(newItem)) {
                     Functions.pickupItem.invoke(player, this.instance.Name);
                     print(`new items: ${SessionManager.getSession(player)!.getItems().size()}`)
                     print(SessionManager.getSession(player)!.getItems());
-                    this.instance.Destroy();
+
+                    if (newItem.pockitable) { this.instance.Destroy(); } else {
+                        let leftHand = player.Character?.FindFirstChild("LeftHand") as BasePart;
+                        this.instance.Parent = leftHand;
+                        (this.instance as BasePart).CFrame = leftHand.CFrame;
+                        this.instance.FindFirstChild("ProximityPrompt")?.Destroy();
+                        let weld = new Instance("WeldConstraint");
+                        weld.Parent = this.instance;
+                        (this.instance as BasePart).Anchored = false;
+                        weld.Part0 = this.instance as BasePart;
+                        weld.Part1 = leftHand;
+                    }
                 }
             });
         }

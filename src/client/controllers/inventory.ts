@@ -1,7 +1,9 @@
+import { Controller } from "@flamework/core";
 import { spawnInventory } from "client/interface/inventory";
 
-export namespace UI {
-    export function initInventory() {
+@Controller()
+export class InventoryController {
+    constructor() {
         spawnInventory();
     }
 }
