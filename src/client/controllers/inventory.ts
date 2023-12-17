@@ -24,16 +24,34 @@ export class InventoryController {
         updateInventoryUI(this.inventory);
     }
 
+    private hasLargeItem(): boolean {
+        for (let item of this.inventory) {
+            if (!item.pockitable) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private getHotbarItemCount(): number {
+        let count = 0;
+        for (let item of this.inventory) {
+            if (item.pockitable) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     private initBinds() {
         Functions.pickupItem.setCallback(async (item: string) => {
             let itemObj: Item = ItemRegistry.getItem(item) as Item;
+            let mod
 
-            if (this.inventory.size() === 0) {
+            if (this.getHotbarItemCount() === 0) {
                 this.selected = 0;
                 updateSelected(this.selected);
             }
-
-            // game.GetService("VoiceChatInternal").
 
             if (!itemObj.pockitable) {
                 let localClone = itemObj.model.Clone();
@@ -54,8 +72,8 @@ export class InventoryController {
 
         Functions.dropItem.setCallback(async (id: string) => {
             this.inventory = await Functions.getItems.invoke();
-            if (this.selected > this.inventory.size() - 1) {
-                this.selected = this.inventory.size() - 1;
+            if (this.selected > this.getHotbarItemCount() - 1) {
+                this.selected = this.getHotbarItemCount() - 1;
                 updateSelected(this.selected);
             }
             game.Workspace.FindFirstChild("largeitem_visualclone")?.Destroy();
@@ -81,7 +99,7 @@ export class InventoryController {
             if (input.UserInputType === Enum.UserInputType.MouseWheel) {
                 let delta = -input.Position.Z;
                 _absoluteScroll += delta;
-                this.selected = _absoluteScroll % this.inventory.size();
+                this.selected = _absoluteScroll % this.getHotbarItemCount();
 
                 updateSelected(this.selected);
             }
