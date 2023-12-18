@@ -17,6 +17,7 @@ export class Loot extends BaseComponent implements OnStart {
 
     onStart(): void {
         this.instance = this.instance as BasePart;
+        (this.instance as BasePart).Anchored = false;
 
         let prompt: ProximityPrompt = new Instance("ProximityPrompt");
 
@@ -53,6 +54,8 @@ export class Loot extends BaseComponent implements OnStart {
                     let weld = new Instance("WeldConstraint");
                     weld.Parent = this.instance;
                     (this.instance as BasePart).Anchored = false;
+                    (this.instance as BasePart).CanCollide = false;
+
                     weld.Part0 = this.instance as BasePart;
                     weld.Part1 = leftHand;
 

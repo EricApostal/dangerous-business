@@ -72,6 +72,7 @@ export class InventoryController {
                     let newPos = new Vector3(rootPart.Position.X + camera.CFrame.LookVector.X * offset, rootPart.Position.Y + camera.CFrame.LookVector.Y * offset, rootPart.Position.Z + camera.CFrame.LookVector.Z * offset);
                     localClone.CFrame = new CFrame(newPos, newPos.add(rootPart.CFrame.LookVector).add(camera.CFrame.LookVector.div(6)));
                     localClone.Name = "largeitem_visualclone";
+                    localClone.CanCollide = false;
                 });
             }
 
