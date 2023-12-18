@@ -20,7 +20,7 @@ export class Mob extends BaseComponent implements OnStart {
         for (const player of Players.GetPlayers()) {
             if (player.Character === undefined) { continue; }
             let distance = (player.Character!.PrimaryPart!.Position.sub((this.instance as BasePart).Position)).Magnitude;
-            if (nearestDistance === undefined || distance < nearestDistance) {
+            if ((nearestDistance === undefined || distance < nearestDistance) && distance < 20) {
                 nearestDistance = distance;
                 nearestPlayer = player;
             }
@@ -33,14 +33,18 @@ export class Mob extends BaseComponent implements OnStart {
         let waypoints: PathWaypoint[] = [];
 
         while (waypoints.size() === 0) {
-            let path: Path = PathfindingService.CreatePath({});
+            let path: Path = PathfindingService.CreatePath({
+                AgentCanJump: true,
+                AgentHeight: 0,
+                AgentRadius: 0,
+            });
             let nearestPlayer = this.getNearestPlayer();
             if (nearestPlayer === undefined) { task.wait(); continue }
             let rootpart = this.getNearestPlayer()!.Character?.FindFirstChild("HumanoidRootPart") as BasePart;
             let finish = rootpart.Position;
             path.ComputeAsync((this.instance as BasePart).Position, finish);
-            waypoints = path.GetWaypoints();
             task.wait();
+            waypoints = path.GetWaypoints();
         }
 
         return waypoints;
