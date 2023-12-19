@@ -7,6 +7,8 @@ interface ClientToServerEvents {
 
 interface ServerToClientEvents {
     event(param1: string): void;
+    startGame(): void;
+    endGame(): void;
 }
 
 interface ClientToServerFunctions {

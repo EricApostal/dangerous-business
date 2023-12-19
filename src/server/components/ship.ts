@@ -1,7 +1,7 @@
 import { OnStart } from "@flamework/core";
 import { Component, BaseComponent } from "@flamework/components";
 import { OnGameStarted } from "server/services/scheduler";
-import { onGameStart } from "server/game/events";
+import { GameSession } from "server/game/state";
 import Signal from "@rbxts/signal";
 
 export const toggleDoors = new Signal();
@@ -19,7 +19,7 @@ let sound = new Instance("Sound");
 sound.SoundId = "rbxassetid://8109376048";
 sound.RollOffMinDistance = 50;
 
-onGameStart.Connect(() => {
+GameSession.onGameStart.Connect(() => {
     toggleDoors.Fire();
 });
 
@@ -96,13 +96,22 @@ export class ShipDoorOpener extends BaseComponent implements OnStart {
     }
 
     onStart() {
-        onGameStart.Connect(() => {
+        GameSession.onGameStart.Connect(() => {
             // Do tween to open ship door on game start 
+            let prompt = new Instance("ProximityPrompt");
+            prompt.ActionText = "Close";
+            prompt.ObjectText = "Door";
+            prompt.HoldDuration = 0.25;
+            prompt.MaxActivationDistance = 10;
+            prompt.Parent = this.instance;
+
+            GameSession.onGameEnd.Connect(() => {
+                prompt.Destroy();
+            });
 
             if (this.instance.IsA("BasePart")) {
                 (this.instance.FindFirstChild("ProximityPrompt") as ProximityPrompt).Triggered.Connect(() => {
                     toggleDoors.Fire();
-                    opened = !opened;
 
                     let text = "";
                     if (opened) {
@@ -110,6 +119,9 @@ export class ShipDoorOpener extends BaseComponent implements OnStart {
                     } else {
                         text = "Open";
                     }
+
+                    opened = !opened;
+
                     (this.instance.FindFirstChild("ProximityPrompt") as ProximityPrompt).ActionText = text;
                 })
             }
@@ -126,12 +138,19 @@ export class StartShip extends BaseComponent implements OnStart {
     }
 
     onStart() {
-        let prompt = this.instance.FindFirstChild("ProximityPrompt") as ProximityPrompt;
+        let prompt = new Instance("ProximityPrompt");
+        prompt.ActionText = "Start";
+        prompt.ObjectText = "Ship";
+        prompt.HoldDuration = 0.25;
+        prompt.MaxActivationDistance = 10;
+        prompt.Parent = this.instance;
+
         prompt.Triggered.Connect(() => {
             prompt.Destroy();
             if (!opened) { // it's backwards, look man this whole file is bad
                 toggleDoors.Fire();
                 opened = !opened;
+                GameSession.onGameEnd.Fire();
             }
 
         });

@@ -1,6 +1,6 @@
 import { BaseComponent, Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
-import { onGameStart } from "server/game/events";
+import { GameSession } from "server/game/state";
 import { Item } from "shared/game/items/item";
 import { ItemRegistry } from "shared/game/items/registry";
 
@@ -45,7 +45,7 @@ export class SpawnPad extends BaseComponent implements OnStart {
     }
 
     onStart() {
-        onGameStart.Connect(() => {
+        GameSession.onGameStart.Connect(() => {
             this.spawnLoot();
         });
     }

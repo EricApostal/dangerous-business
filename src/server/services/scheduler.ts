@@ -1,8 +1,8 @@
 import { OnStart, Service } from "@flamework/core";
 import { Players } from "@rbxts/services";
 import { Modding } from "@flamework/core";
-import { onGameStart } from "server/game/events";
 import { BaseComponent } from "@flamework/components";
+import { GameSession } from "server/game/state";
 
 export interface OnPlayerJoined {
     onPlayerJoined(player: Player): void;
@@ -46,7 +46,7 @@ export class GameStartService extends BaseComponent implements OnStart {
         Modding.onListenerAdded<OnGameStarted>((object) => listeners.add(object));
         Modding.onListenerRemoved<OnGameStarted>((object) => listeners.delete(object));
 
-        onGameStart.Connect(() => {
+        GameSession.onGameStart.Connect(() => {
             for (const listener of listeners) {
                 task.spawn(() => listener.onGameStarted());
             }

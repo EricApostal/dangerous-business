@@ -1,6 +1,6 @@
 import Signal from "@rbxts/signal";
-
-export const onGameStart = new Signal();
+import { Events } from "server/network";
+import { GameSession } from "./state";
 
 // On server start
 export function init() {
@@ -11,11 +11,13 @@ export function init() {
 
 // On game start
 export function start() {
-    onGameStart.Fire();
+    GameSession.startGame();
+    Events.startGame.broadcast();
 }
 
 // On game end
 export function close() {
-
+    GameSession.endGame();
+    Events.endGame.broadcast();
 }
 

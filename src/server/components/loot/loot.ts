@@ -1,6 +1,5 @@
 import { Component, BaseComponent } from "@flamework/components";
 import { OnStart } from "@flamework/core";
-import { onGameStart } from "server/game/events";
 import { Functions } from "server/network";
 import { onItemDropped } from "server/services/inventory";
 import { SessionManager } from "server/services/session";

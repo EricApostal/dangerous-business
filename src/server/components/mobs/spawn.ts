@@ -1,6 +1,6 @@
 import { BaseComponent, Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
-import { onGameStart } from "server/game/events";
+import { GameSession } from "server/game/state";
 import { Shifter } from "shared/game/mobs/mobs/shifter";
 import { MobRegistry } from "shared/game/mobs/registry";
 
@@ -47,7 +47,7 @@ export class SpawnPad extends BaseComponent implements OnStart {
     }
 
     onStart() {
-        onGameStart.Connect(() => {
+        GameSession.onGameStart.Connect(() => {
             task.wait(30);
             if (math.random(1, 100) > spawnChance) { return; }
             this.spawnMobs();
