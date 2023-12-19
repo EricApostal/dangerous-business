@@ -4,6 +4,8 @@ import { onGameStart } from "server/game/events";
 import { Shifter } from "shared/game/mobs/mobs/shifter";
 import { MobRegistry } from "shared/game/mobs/registry";
 
+let spawnChance = 50;
+
 @Component({
     tag: "mob_spawn"
 })
@@ -46,8 +48,9 @@ export class SpawnPad extends BaseComponent implements OnStart {
 
     onStart() {
         onGameStart.Connect(() => {
+            task.wait(30);
+            if (math.random(1, 100) > spawnChance) { return; }
             this.spawnMobs();
         });
     }
-
 }

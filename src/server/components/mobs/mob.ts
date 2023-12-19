@@ -61,7 +61,7 @@ export class Mob extends BaseComponent implements OnStart {
             path.remove(0);
             path.remove(0);
 
-            let timePerNode = 0.2;
+            let timePerNode = 0.4;
             for (const waypoint of path) {
                 let newCFrame = waypoint.Position.add(new Vector3(0, 1 + (this.instance as BasePart).Size.Y / 2, 0));
                 TweenService.Create((this.instance as BasePart), new TweenInfo(timePerNode), { Position: newCFrame }).Play();

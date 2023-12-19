@@ -8,6 +8,13 @@ export const toggleDoors = new Signal();
 
 let opened = false;
 
+/*
+This whole file needs to be reworked.
+
+Door opening is inverted, because toggle.Doors.Fire() runs async.
+When setting opened = !opened, it's actually setting it to the previous value.
+*/
+
 let sound = new Instance("Sound");
 sound.SoundId = "rbxassetid://8109376048";
 sound.RollOffMinDistance = 50;
@@ -92,8 +99,6 @@ export class ShipDoorOpener extends BaseComponent implements OnStart {
         onGameStart.Connect(() => {
             // Do tween to open ship door on game start 
 
-
-
             if (this.instance.IsA("BasePart")) {
                 (this.instance.FindFirstChild("ProximityPrompt") as ProximityPrompt).Triggered.Connect(() => {
                     toggleDoors.Fire();
@@ -108,6 +113,27 @@ export class ShipDoorOpener extends BaseComponent implements OnStart {
                     (this.instance.FindFirstChild("ProximityPrompt") as ProximityPrompt).ActionText = text;
                 })
             }
+        });
+    }
+}
+
+@Component({
+    tag: "start_ship"
+})
+export class StartShip extends BaseComponent implements OnStart {
+    constructor() {
+        super();
+    }
+
+    onStart() {
+        let prompt = this.instance.FindFirstChild("ProximityPrompt") as ProximityPrompt;
+        prompt.Triggered.Connect(() => {
+            prompt.Destroy();
+            if (!opened) { // it's backwards, look man this whole file is bad
+                toggleDoors.Fire();
+                opened = !opened;
+            }
+
         });
     }
 }
