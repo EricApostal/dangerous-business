@@ -1,16 +1,5 @@
-# Flamework Template
+# Dangerous Business
+Just a tech demo :D
 
-👋 Hey! This is a pre-configured template you can use for your projects that use [Flamework](https://fireboltofdeath.dev/docs/flamework/).
-
-## Usage
-
-First, create the folder on your computer where you want your project to be stored.
-
-Then, open a terminal at that directory and run the following commands:
-
-```console
-npx degit rbxts-flamework/template
-npm i
-```
-
-That's it! The template has been installed. For further information on how to use Flamework in your project, please see [here](https://fireboltofdeath.dev/docs/flamework).
+# About
+This is a Roblox game I made based on the wildly popular game Lethal Company. While it does contain a lot of functionality, it's not a full game, and I really only made it for the sake of learning Roblox-TS. This is a good reference for using Flamework / Roact.
